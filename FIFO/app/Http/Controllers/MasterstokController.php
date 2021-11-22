@@ -32,13 +32,34 @@ class MasterstokController extends Controller
 	}
     public function show(Request $request)
     {
-        $masterstok = Masterstok::where('id_kodebarang','LIKE','%'.$request->id_kodebarang.'%')->get();
-        return view('/Masterstok/index', 
-        [
-            'title' => 'Master Stok',
-            "kunci" =>$request->id_kodebarang,
-            'masterstok'=> $masterstok
-        ]);
+        if($request->bukti != "")
+        {
+            $masterstok = Masterstok::where('bukti','LIKE','%'.$request->bukti.'%')->get();
+            $bukti = $request->bukti;
+            return view('/Masterstok/index', 
+            [
+                'title' => 'Master Stok',
+                "bukti" =>$bukti,
+                'masterstok'=> $masterstok
+            ]);
+        }
+        if($request->kodeBarang !="")
+        {
+            $masterstok = Masterstok::where('id_kodebarang','LIKE','%'.$request->id_kodebarang.'%')->get();
+            return view('/Masterstok/index', 
+            [
+                'title' => 'Master Stok',
+                "kodeBarang" =>$request->id_kodebarang,
+                'masterstok'=> $masterstok
+            ]);
+        }
+            $masterstok = Masterstok::all();
+            return view('/Masterstok/index', 
+            [
+                'title' => 'Master Stok',
+                'masterstok'=> $masterstok
+            ]);
+    
     }
     public function cetak_pdf()
     {

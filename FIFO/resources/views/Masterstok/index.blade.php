@@ -25,9 +25,17 @@
                                 <div class="form-group mb-2">
                                     @csrf
                                     <label for="kodeBarang">Kode Barang</label>
-                                    <input type="text" class="form-control @error('kodeBarang') is-invalid @enderror" id="kodeBarang" name="kodeBarang" value="{{ old('kodeBarang') ?? $kunci ?? '' }}" placeholder="kodeBarang"
+                                    <input type="text" class="form-control @error('kodeBarang') is-invalid @enderror" id="kodeBarang" name="kodeBarang" value="{{ old('kodeBarang') ?? $kodeBarang ?? '' }}" placeholder="kodeBarang"
                                     style="text-transform: uppercase">
                                     @error('kodeBarang')
+                                    <div class="invalid-feedback">
+                                       {{$message}}
+                                    </div>
+                                    @enderror
+                                    <label for="bukti">Bukti</label>
+                                    <input type="text" class="form-control @error('bukti') is-invalid @enderror" id="bukti" name="bukti" value="{{ old('bukti') ?? $bukti ?? '' }}" placeholder="bukti"
+                                    style="text-transform: uppercase">
+                                    @error('bukti')
                                     <div class="invalid-feedback">
                                        {{$message}}
                                     </div>

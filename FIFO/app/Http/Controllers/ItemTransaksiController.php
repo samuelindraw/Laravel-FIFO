@@ -276,6 +276,7 @@ class ItemTransaksiController extends Controller
                             //dd($update,'if');s
                             $item->qty = $stok_update;
                             $item->save();
+                            
                             $masterhistory = new Masterhistory([
                                 'bukti' => $buktikurang,
                                 'tgl_trans' => Carbon::createFromFormat('Y-m-d', $request->tgl_masuk)->format('Y-m-d H:i:s'),
@@ -287,7 +288,6 @@ class ItemTransaksiController extends Controller
                                 'program' => "ISSUE",
                                 'userid' => auth()->user()->username
                             ]);
-                            $masterhistory->save();
                             //update history
                         } else {
 
@@ -296,7 +296,6 @@ class ItemTransaksiController extends Controller
                             $item->qty = abs($qty);
                             $item->save();
                             //dd($tampungs, $item->qty, $qty);
-                           
                             $masterhistory = new Masterhistory([
                                 'bukti' => $buktikurang,
                                 'tgl_trans' => Carbon::createFromFormat('Y-m-d', $request->tgl_masuk)->format('Y-m-d H:i:s'),
@@ -308,11 +307,9 @@ class ItemTransaksiController extends Controller
                                 'program' => "ISSUE",
                                 'userid' => auth()->user()->username
                             ]);
-                            $masterhistory->save();
-                            
                             
                         }                 
-                        
+                        $masterhistory->save();
                     }
                     
                     else{
@@ -324,12 +321,6 @@ class ItemTransaksiController extends Controller
         DB::connection('mysql')->commit();
         return redirect('/itemTransaksi/index')->with('success','Data Berhasil ditambah');
     }
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\itemTransaksi  $itemTransaksi
-     * @return \Illuminate\Http\Response
-     */
     public function show(itemTransaksi $itemTransaksi)
     {
         $itemTransaksi = itemTransaksi::where('bukti','LIKE','%'.$request->bukti.'%')->get();
@@ -340,6 +331,12 @@ class ItemTransaksiController extends Controller
             'itemTransaksi'=> $itemTransaksi
         ]);
     }
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\itemTransaksi  $itemTransaksi
+     * @return \Illuminate\Http\Response
+     */
 
     /**
      * Show the form for editing the specified resource.

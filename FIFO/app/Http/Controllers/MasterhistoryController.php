@@ -19,7 +19,7 @@ class MasterhistoryController extends Controller
      */
     public function index()
     {
-        $masterhistory =  Masterhistory::orderBy('id_kodebarang', 'asc')->get();
+        $masterhistory =  Masterhistory::orderBy('id', 'ASC')->get();
         return view('Masterhistory/index', 
         [
             'title' => 'Master History',
