@@ -5,9 +5,9 @@
 <div class="container">
     <div class="row">
         <div class="col-10 mb-3">
-            <form action="/itemTransaksi/addTransaksi" method="post" class="mt-3">
+            <form action="/itemTransaksi/kurangTransaksi" method="post" class="mt-3">
                 @csrf
-                <input hidden type="text" class="form-control @error('bukti') is-invalid @enderror" id="bukti" name="bukti" value="TAMBAH" placeholder="Kode Barang"
+                <input hidden type="text" class="form-control @error('bukti') is-invalid @enderror" id="bukti" name="bukti" value="KURANG" placeholder="Kode Barang"
                 style="text-transform: uppercase">
                 <div class="mb-3">
                   <label for="loc_site" class="form-label">Kode Lokasi</label>

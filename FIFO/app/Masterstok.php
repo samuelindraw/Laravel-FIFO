@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Masterstok extends Model
 {
-    protected $table = 'master_lokasis';
+    protected $table = 'master_stocks';
     protected $fillable = [
         'id',
         'id_lokasi',

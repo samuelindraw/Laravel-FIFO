@@ -1,5 +1,5 @@
 @extends('layout.main')
-@section('title', 'Item Transaksi')
+@section('title', 'Master stok')
 @section('container')
     <h1 class="mb-3 text-center">{{ $title }}</h1>
     <div class="container">
@@ -16,23 +16,18 @@
               <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
             @endif
-            @if (session()->has('error'))
-            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-              {{ session('error') }}
-              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-            @endif
+            <a href="/Masterstok/export_excel" class="btn btn-success my-3" target="_blank">EXPORT EXCEL</a>
             <div class="container-fluid">
                     <!-- DataTales Example -->
                     <div class="card">
                         <div class="card-body">
-                            <form class="form-inline" action="/itemTransaksi/search" method="post">
+                            <form class="form-inline" action="/Masterstok/search" method="post">
                                 <div class="form-group mb-2">
                                     @csrf
-                                    <label for="kodeBarang">Bukti</label>
-                                    <input type="text" class="form-control @error('bukti') is-invalid @enderror" id="bukti" name="bukti" value="{{ old('bukti') ?? $kunci ?? '' }}" placeholder="bukti"
+                                    <label for="kodeBarang">Kode Barang</label>
+                                    <input type="text" class="form-control @error('kodeBarang') is-invalid @enderror" id="kodeBarang" name="kodeBarang" value="{{ old('kodeBarang') ?? $kunci ?? '' }}" placeholder="kodeBarang"
                                     style="text-transform: uppercase">
-                                    @error('bukti')
+                                    @error('kodeBarang')
                                     <div class="invalid-feedback">
                                        {{$message}}
                                     </div>
@@ -46,39 +41,30 @@
                         </div>
                     </div>
                     <div class="card shadow mb-4">
-                        <div class="card-header py-3">
-                            <a href="/itemTransaksi/kurangTransaksi" class="btn btn-danger bottom-buffer" id="btn-add-barang"
-                            style="float: right;"><i class="fa fa-plus"></i> Jual Barang </a>
-                            <a href="/itemTransaksi/addTransaksi" class="btn btn-primary bottom-buffer" id="btn-add-barang"
-                                style="float:right;"><i class="fa fa-plus"></i> Tambah Barang </a>
-                            <h6 class="m-0 font-weight-bold text-primary">Table Master Barang</h6>
-                        </div>
                         <div class="card-body">
                             <div class="table-responsive">
                                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                     <thead>
                                         <tr>
-                                            <th class="d-none d-sm-table-cell">Bukti</th>
                                             <th class="d-none d-sm-table-cell">Kode Lokasi</th>
                                             <th class="d-none d-sm-table-cell">Nama Lokasi</th>
                                             <th class="d-none d-sm-table-cell">Kode Barang</th>
                                             <th class="d-none d-sm-table-cell">Nama Barang</th>
-                                            <th class="d-none d-sm-table-cell">Tgl_masuk</th>
+                                            <th class="d-none d-sm-table-cell">Tgl Masuk</th>
                                             <th class="d-none d-sm-table-cell">qty</th>
                                             <th class="d-none d-sm-table-cell">um</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($itemTransaksi as $trans )                                       
+                                        @foreach ($masterstok as $stok )                                       
                                         <tr>
-                                            <td>{{ $trans->bukti }}</td>
-                                            <td>{{ $trans->MasterLokasi->kodeLokasi }}</td>
-                                            <td>{{ optional($trans->MasterLokasi)->namaLokasi }}</td>
-                                            <td>{{ $trans->MasterBarang->kodeBarang }}</td>
-                                            <td>{{ optional($trans->MasterBarang)->namaBarang }}</td>
-                                            <td>{{ \Carbon\Carbon::parse($trans->tgl_masuk)->format('d/m/Y')}}</td>
-                                            <td>{{ $trans->qty }}</td>
-                                            <td>{{ $trans->um }}</td>
+                                            <td>{{ $stok->MasterLokasi->kodeLokasi }}</td>
+                                            <td>{{ optional($stok->MasterLokasi)->namaLokasi }}</td>
+                                            <td>{{ $stok->MasterBarang->kodeBarang }}</td>
+                                            <td>{{ optional($stok->MasterBarang)->namaBarang }}</td>
+                                            <td>{{ \Carbon\Carbon::parse($stok->tgl_masuk)->format('d/m/Y')}}</td>
+                                            <td>{{ $stok->qty }}</td>
+                                            <td>{{ $stok->MasterBarang->um }}</td>
                                         </tr>
                                         @endforeach
                                     </tbody>

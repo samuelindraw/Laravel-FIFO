@@ -2,13 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Masterstok;
+use App\Masterhistory;
 use Illuminate\Http\Request;
-use App\Exports\masterstokExport;
+use App\Exports\masterhistoryExport;
 use Maatwebsite\Excel\Facades\Excel;
 
-
-class MasterstokController extends Controller
+class MasterhistoryController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,17 +16,17 @@ class MasterstokController extends Controller
      */
     public function index()
     {
-        $masterstok =  Masterstok::orderBy('id_kodebarang', 'asc')->get();
-        return view('Masterstok/index', 
+        $masterhistory =  Masterhistory::orderBy('id_kodebarang', 'asc')->get();
+        return view('Masterhistory/index', 
         [
-            'title' => 'Master stok',
-            "active" =>'masterstok',
-            'masterstok'=> $masterstok
+            'title' => 'Master History',
+            "active" =>'history',
+            'masterhistory'=> $masterhistory
         ]);
     }
     public function export_excel()
 	{
-		return Excel::download(new masterstokExport, 'masterstok.xlsx');
+		return Excel::download(new masterhistoryExport, 'history.xlsx');
 	}
     /**
      * Show the form for creating a new resource.
@@ -53,27 +52,21 @@ class MasterstokController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Masterstok  $masterstok
+     * @param  \App\Masterhistory  $masterhistory
      * @return \Illuminate\Http\Response
      */
-    public function show(Masterstok $masterstok)
+    public function show(Masterhistory $masterhistory)
     {
-        $masterstok = Masterstok::where('id_kodebarang','LIKE','%'.$request->id_kodebarang.'%')->get();
-        return view('/Masterstok/index', 
-        [
-            'title' => 'Master Stok',
-            "kunci" =>$request->id_kodebarang,
-            'masterLokasi'=> $masterstok
-        ]);
+        //
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Masterstok  $masterstok
+     * @param  \App\Masterhistory  $masterhistory
      * @return \Illuminate\Http\Response
      */
-    public function edit(Masterstok $masterstok)
+    public function edit(Masterhistory $masterhistory)
     {
         //
     }
@@ -82,10 +75,10 @@ class MasterstokController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Masterstok  $masterstok
+     * @param  \App\Masterhistory  $masterhistory
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Masterstok $masterstok)
+    public function update(Request $request, Masterhistory $masterhistory)
     {
         //
     }
@@ -93,10 +86,10 @@ class MasterstokController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Masterstok  $masterstok
+     * @param  \App\Masterhistory  $masterhistory
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Masterstok $masterstok)
+    public function destroy(Masterhistory $masterhistory)
     {
         //
     }

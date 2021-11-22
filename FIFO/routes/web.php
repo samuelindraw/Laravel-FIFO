@@ -52,7 +52,29 @@ Route::delete('/MasterLokasi/destroy/{id}','MasterLokasiController@destroy' )->n
 Route::get('/itemTransaksi/index','itemTransaksiController@index')->middleware('auth');
 Route::get('/itemTransaksi/addTransaksi','itemTransaksiController@create');
 Route::post('/itemTransaksi/addTransaksi','itemTransaksiController@store');
+
+Route::get('/itemTransaksi/kurangTransaksi','itemTransaksiController@kurang');
+Route::post('/itemTransaksi/kurangTransaksi','itemTransaksiController@kurang_proses');
+
 Route::get('/itemTransaksi/{id}','itemTransaksiController@edit');
 Route::post('/itemTransaksi/search', 'itemTransaksiController@show');
 Route::patch('/itemTransaksi/editTransaksi','itemTransaksiController@update');
 Route::delete('/itemTransaksi/destroy/{id}','itemTransaksiController@destroy' )->name('destroyTransaksi');
+
+//MasterStok
+Route::get('/Masterstok/index','MasterstokController@index')->middleware('auth');
+Route::get('/Masterstok/export_excel', 'MasterstokController@export_excel');
+
+//MasterStok
+Route::get('/Masterhistory/index','MasterhistoryController@index')->middleware('auth');
+Route::get('/Masterhistory/export_excel', 'MasterhistoryController@export_excel');
+
+//ROUTE HELPER
+Route::get('getLokasi/{id}', function ($id) {
+    $lokasi = App\MasterLokasi::where('id',$id)->first();
+    return response()->json($lokasi);
+});
+Route::get('getBarang/{id}', function ($id) {
+    $barang = App\MasterBarang::where('id',$id)->first();
+    return response()->json($barang);
+});

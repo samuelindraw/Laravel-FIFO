@@ -4,19 +4,21 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class itemTransaksi extends Model
+class Masterhistory extends Model
 {
+    // protected $table = 'Masterhistory';
     protected $fillable = [
         'id',
         'bukti',
+        'tgl_trans',
+        'jam',
         'id_lokasi',
         'id_kodebarang',
-        'namaBarang',
-        'um',
         'qty',
-        'tgl_masuk'
+        'tgl_masuk',
+        'program',
+        'userid'
     ];
-    
     public function MasterBarang()
     {
         return $this->belongsTo(MasterBarang::class,'id_kodebarang','id');
