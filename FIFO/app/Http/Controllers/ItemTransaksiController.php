@@ -20,7 +20,7 @@ class ItemTransaksiController extends Controller
      */
     public function index()
     {
-        $itemTransaksi = itemTransaksi::orderBy('bukti', 'desc')->get();
+        $itemTransaksi = itemTransaksi::orderBy('bukti', 'asc')->get();
         // foreach($itemTransaksi as $item)
         // {
         //     dd(optional($item->MasterLokasi)->namaLokasi);
@@ -191,13 +191,13 @@ class ItemTransaksiController extends Controller
         //REQUEST->BUKTI = BARU
         // $valid = itemTransaksi::where('kodeBarang', $request->kodeBarang)->where('loc_site', $request->loc_site)
         // ->latest()->first();
-        $Masterstok = Masterstok::where('id_kodebarang', $request->id_kodebarang)->
+        $mastertransaksi = itemTransaksi::where('id_kodebarang', $request->id_kodebarang)->
         where('id_lokasi', $request->id_lokasi)->latest()->first();
         //dd($Masterstok);
-        if($Masterstok != null)
+        if($mastertransaksi != null)
         {
             // VALIDASI BUY KECUALI LOKSI NYA BEDA ? DAN BARANG BEDA ? udh ok
-            if(strtotime(Carbon::createFromFormat('Y-m-d', $request->tgl_masuk)->format('Y-m-d H:i:s')) <= strtotime($Masterstok->tgl_masuk))
+            if(strtotime(Carbon::createFromFormat('Y-m-d', $request->tgl_masuk)->format('Y-m-d H:i:s')) <= strtotime($mastertransaksi->tgl_masuk))
             {
                 //dd('error disini');
                 return redirect('/itemTransaksi/index')->with('error','ERROR, Tanggal masuk Pembelian/Penjualan !');
@@ -255,6 +255,7 @@ class ItemTransaksiController extends Controller
                 return redirect('/itemTransaksi/index')->with('error','ERROR, Stok untuk penjualan tidak cukup !');
             }
             else {
+                $sisa = 0;
                 $qty = $request->qty;
                 $tampungs = 0;
                 $temp = $qty;
@@ -264,13 +265,15 @@ class ItemTransaksiController extends Controller
                         
                         $itemQty = $item->qty;
                         if ($qty > 0) {     
-                            $stok_update = 0;
+                            $sisa = $request->qty - $item->qty;
+                            // dd($sisa);
+                            $stok_update = 0;   
                             $tampungs = $qty;
                             // $tampungan = $request->qty - $qty; // 100 - 90 = 10
                             //brati tampungan saya update 
                             
                             // $update = Masterstok::where('id',$item->id)->first();
-                            //dd($update,'if');
+                            //dd($update,'if');s
                             $item->qty = $stok_update;
                             $item->save();
                             $masterhistory = new Masterhistory([
@@ -284,10 +287,16 @@ class ItemTransaksiController extends Controller
                                 'program' => "ISSUE",
                                 'userid' => auth()->user()->username
                             ]);
+                            $masterhistory->save();
                             //update history
                         } else {
+
+                            $sisa = $sisa - abs($qty);
+                            //dd($sisa);
                             $item->qty = abs($qty);
                             $item->save();
+                            //dd($tampungs, $item->qty, $qty);
+                           
                             $masterhistory = new Masterhistory([
                                 'bukti' => $buktikurang,
                                 'tgl_trans' => Carbon::createFromFormat('Y-m-d', $request->tgl_masuk)->format('Y-m-d H:i:s'),
@@ -299,64 +308,15 @@ class ItemTransaksiController extends Controller
                                 'program' => "ISSUE",
                                 'userid' => auth()->user()->username
                             ]);
+                            $masterhistory->save();
+                            
+                            
                         }                 
-                        //DB::connection('mysql')->commit();
-                        // $cekhistory = Masterhistory::where('bukti', $buktikurang)->latest()->first();
-                        //cek LIST
-                        // if(!$cekhistory) {
-                            //nama e generate sendiri susah
-                            // $kurang = itemTransaksi::where('bukti', 'LIKE', 'KURANG%')->latest()->first();
-
-                            // list($mem_prefix,$mem_num) = sscanf($kurang->bukti,"%[A-Za-z]%[0-9]");
-                            // $mem_num = $mem_num;
-                            // $buktihistory =  $mem_prefix . str_pad($mem_num + 1,2,'0',STR_PAD_LEFT);
-                            //create history
-                        // dd($item->qty);
                         
-                        //dd($masterhistory);
-                        $masterhistory->save();
-                            // DB::connection('mysql')->commit();
-                        // }
-                        // else
-                        // {
-                        //     //dd("ABC");
-                        // }
                     }
                     
                     else{
-                           
-                        $stok_update = $item->qty - $qty;
-                        //dd($stok_update);
-                        // dd($qty);
-                        //dd($stok_update);
-                        // $update = Masterstok::where('id',$item->id)->first();
-                        //dd($update);
-                        $item->qty = $stok_update;
-                        $item->save();
-                        // DB::connection('mysql')->commit();
-                        $kurang = itemTransaksi::where('bukti', 'LIKE', 'KURANG%')->latest()->first();
-                        $cekhistory = Masterhistory::where('bukti', $buktikurang)->latest()->first();
-                        //cek LISTmm m
-                        list($mem_prefix,$mem_num) = sscanf($kurang->bukti,"%[A-Za-z]%[0-9]");
-                        $buktihistory =  $mem_prefix . str_pad($mem_num + 1,2,'0',STR_PAD_LEFT);
-                        // if($cekhistory)
-                        // {
-                            //create history
-                            $masterhistory = new Masterhistory([
-                                'bukti' => $buktikurang,
-                                'tgl_trans' => Carbon::createFromFormat('Y-m-d', $request->tgl_masuk)->format('Y-m-d H:i:s'),
-                                'jam' => Carbon::now()->format('H:i'),
-                                'id_lokasi' => $request->id_lokasi,
-                                'id_kodebarang' => $request->id_kodebarang,
-                                'qty' =>  $item->qty - $request->qty,
-                                'tgl_masuk' => $item->tgl_masuk,
-                                'program' => "ISSUE",
-                                'userid' => auth()->user()->username
-                            ]);
-                            //dd($masterhistory);
-                            $masterhistory->save();
-                            // DB::connection('mysql')->commit();
-                        // }
+                        break;
                     }
                 }
             }
@@ -372,7 +332,13 @@ class ItemTransaksiController extends Controller
      */
     public function show(itemTransaksi $itemTransaksi)
     {
-        //
+        $itemTransaksi = itemTransaksi::where('bukti','LIKE','%'.$request->bukti.'%')->get();
+        return view('/Masterstok/index', 
+        [
+            'title' => 'Master Transaksi',
+            "kunci" =>$request->bukti,
+            'itemTransaksi'=> $itemTransaksi
+        ]);
     }
 
     /**

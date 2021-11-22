@@ -16,7 +16,6 @@
               <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
             @endif
-            <a href="/Masterhistory/export_excel" class="btn btn-success my-3" target="_blank">EXPORT EXCEL</a>
             <div class="container-fluid">
                     <!-- DataTales Example -->
                     <div class="card">
@@ -25,7 +24,7 @@
                                 <div class="form-group mb-2">
                                     @csrf
                                     <label for="kodeBarang">Kode Barang</label>
-                                    <input type="text" class="form-control @error('kodeBarang') is-invalid @enderror" id="kodeBarang" name="kodeBarang" value="{{ old('kodeBarang') ?? $kunci ?? '' }}" placeholder="kodeBarang"
+                                    <input type="text" class="form-control @error('kodeBarang') is-invalid @enderror" id="kodeBarang" name="kodeBarang" value="{{ old('kodeBarang') ?? $kodeBarang ?? '' }}" placeholder="kodeBarang"
                                     style="text-transform: uppercase">
                                     @error('kodeBarang')
                                     <div class="invalid-feedback">
@@ -33,28 +32,28 @@
                                     </div>
                                     @enderror
                                     <br>
-                                    <label for="kodeBarang">Kode Barang</label>
-                                    <input type="text" class="form-control @error('kodeBarang') is-invalid @enderror" id="kodeBarang" name="kodeBarang" value="{{ old('kodeBarang') ?? $kunci ?? '' }}" placeholder="kodeBarang"
+                                    <label for="bukti">Bukti</label>
+                                    <input type="text" class="form-control @error('bukti') is-invalid @enderror" id="bukti" name="bukti" value="{{ old('bukti') ?? $bukti ?? '' }}" placeholder="bukti"
                                     style="text-transform: uppercase">
-                                    @error('kodeBarang')
+                                    @error('bukti')
                                     <div class="invalid-feedback">
                                        {{$message}}
                                     </div>
                                     @enderror
                                     <br>
-                                    <label for="kodeBarang">Kode Barang</label>
-                                    <input type="text" class="form-control @error('kodeBarang') is-invalid @enderror" id="kodeBarang" name="kodeBarang" value="{{ old('kodeBarang') ?? $kunci ?? '' }}" placeholder="kodeBarang"
+                                    <label for="tgl_trans">Tanggal trans</label>
+                                    <input type="date" class="form-control @error('tgl_trans') is-invalid @enderror" id="tgl_trans" name="tgl_trans" value="{{ old('tgl_trans') ?? $tgl_trans ?? '' }}" placeholder="tgl_trans"
                                     style="text-transform: uppercase">
-                                    @error('kodeBarang')
+                                    @error('tgl_trans')
                                     <div class="invalid-feedback">
                                        {{$message}}
                                     </div>
                                     @enderror
                                     <br>
-                                    <label for="kodeBarang">Kode Barang</label>
-                                    <input type="text" class="form-control @error('kodeBarang') is-invalid @enderror" id="kodeBarang" name="kodeBarang" value="{{ old('kodeBarang') ?? $kunci ?? '' }}" placeholder="kodeBarang"
+                                    <label for="kodeLokasi">Kode Lokasi</label>
+                                    <input type="text" class="form-control @error('kodeLokasi') is-invalid @enderror" id="kodeLokasi" name="kodeLokasi" value="{{ old('kodeLokasi') ?? $kodeLokasi ?? '' }}" placeholder="kodeLokasi"
                                     style="text-transform: uppercase">
-                                    @error('kodeBarang')
+                                    @error('kodeLokasi')
                                     <div class="invalid-feedback">
                                        {{$message}}
                                     </div>
@@ -66,6 +65,8 @@
                                 <button type="submit" id="submit" name="submit" class="btn btn-primary mb-2"><i
                                         class="fa fa-search fa-fw fa-xs"></i>Cari</button>
                             </form>
+                            <a href="/Masterhistory/export_excel" class="btn btn-success my-3" target="_blank">EXPORT EXCEL</a>
+                            <a href="/Masterhistory/cetak_pdf" class="btn btn-primary" target="_blank">CETAK PDF</a>
                         </div>
                     </div>
                     <div class="card shadow mb-4">

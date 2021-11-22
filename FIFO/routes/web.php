@@ -26,9 +26,9 @@ Route::get('/register','RegisterController@index')->middleware('guest');
 
 
 
-
+Route::group(['middleware' => 'auth'], function () {
 //Master_Barang
-Route::get('/MasterBarang/index','MasterBarangController@index')->middleware('auth');
+Route::get('/MasterBarang/index','MasterBarangController@index');
 Route::get('/MasterBarang/addBarang','MasterBarangController@create');
 Route::post('/MasterBarang/addBarang','MasterBarangController@store');
 Route::get('/MasterBarang/{id}','MasterBarangController@edit');
@@ -39,7 +39,7 @@ Route::delete('/MasterBarang/destroy/{id}','MasterBarangController@destroy' )->n
 
 
 //Master Lokasi
-Route::get('/MasterLokasi/index','MasterLokasiController@index')->middleware('auth');
+Route::get('/MasterLokasi/index','MasterLokasiController@index');
 Route::get('/MasterLokasi/addLokasi','MasterLokasiController@create');
 Route::post('/MasterLokasi/addLokasi','MasterLokasiController@store');
 Route::get('/MasterLokasi/{id}','MasterLokasiController@edit');
@@ -49,7 +49,7 @@ Route::delete('/MasterLokasi/destroy/{id}','MasterLokasiController@destroy' )->n
 
 
 //item_Transaksi
-Route::get('/itemTransaksi/index','itemTransaksiController@index')->middleware('auth');
+Route::get('/itemTransaksi/index','itemTransaksiController@index');
 Route::get('/itemTransaksi/addTransaksi','itemTransaksiController@create');
 Route::post('/itemTransaksi/addTransaksi','itemTransaksiController@store');
 
@@ -60,14 +60,21 @@ Route::get('/itemTransaksi/{id}','itemTransaksiController@edit');
 Route::post('/itemTransaksi/search', 'itemTransaksiController@show');
 Route::patch('/itemTransaksi/editTransaksi','itemTransaksiController@update');
 Route::delete('/itemTransaksi/destroy/{id}','itemTransaksiController@destroy' )->name('destroyTransaksi');
+Route::post('/itemTransaksi/search', 'itemTransaksiController@show');
 
 //MasterStok
-Route::get('/Masterstok/index','MasterstokController@index')->middleware('auth');
+Route::get('/Masterstok/index','MasterstokController@index');
 Route::get('/Masterstok/export_excel', 'MasterstokController@export_excel');
+Route::get('/Masterstok/cetak_pdf', 'MasterstokController@cetak_pdf');
+Route::post('/Masterstok/search', 'MasterstokController@show');
 
-//MasterStok
-Route::get('/Masterhistory/index','MasterhistoryController@index')->middleware('auth');
+
+//Master History
+Route::get('/Masterhistory/index','MasterhistoryController@index');
 Route::get('/Masterhistory/export_excel', 'MasterhistoryController@export_excel');
+Route::post('/Masterhistory/search', 'MasterhistoryController@show');
+Route::get('/Masterhistory/cetak_pdf', 'MasterhistoryController@cetak_pdf');
+});
 
 //ROUTE HELPER
 Route::get('getLokasi/{id}', function ($id) {

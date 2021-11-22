@@ -45,7 +45,16 @@ class MasterLokasiController extends Controller
             'kodeLokasi' => 'required',
             'namaLokasi' => 'required'
         ]);
-       MasterLokasi::create($validatedData);
+       $lokasi = MasterLokasi::where('namaLokasi', $request->namaLokasi)->where('kodeLokasi', $request->kodeLokasi)->first();
+       if(!$lokasi)
+       {
+            MasterLokasi::create($validatedData);
+       }
+       else
+       {
+        return redirect('/MasterLokasi/index')->with('error','Data tidak boleh sama');
+       }
+      
        //$request->session()->flash('success','Registration Success');
        return redirect('MasterLokasi/index')->with('success','Data Berhasil ditambah');
     }

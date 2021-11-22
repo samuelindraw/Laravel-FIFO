@@ -16,7 +16,7 @@
               <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
             @endif
-            <a href="/Masterstok/export_excel" class="btn btn-success my-3" target="_blank">EXPORT EXCEL</a>
+           
             <div class="container-fluid">
                     <!-- DataTales Example -->
                     <div class="card">
@@ -38,6 +38,8 @@
                                 <button type="submit" id="submit" name="submit" class="btn btn-primary mb-2"><i
                                         class="fa fa-search fa-fw fa-xs"></i>Cari</button>
                             </form>
+                            <a href="/Masterstok/export_excel" class="btn btn-success my-3" target="_blank">EXPORT EXCEL</a>
+                            <a href="/Masterstok/cetak_pdf" class="btn btn-primary" target="_blank">CETAK PDF</a>
                         </div>
                     </div>
                     <div class="card shadow mb-4">

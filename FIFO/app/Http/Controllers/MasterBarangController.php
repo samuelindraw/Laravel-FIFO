@@ -46,7 +46,16 @@ class MasterBarangController extends Controller
             'namaBarang' => 'required',
             'um' => 'required'
         ]);
-       MasterBarang::create($validatedData);
+       $masterbrg = MasterBarang::where('namaBarang', $request->namaBarang)->first();
+       if(!$masterbrg)
+       {
+            MasterBarang::create($validatedData);
+       }
+       else
+       {
+        return redirect('/MasterBarang/index')->with('error','Data tidak boleh sama');
+       }
+      
        return redirect('/MasterBarang/index')->with('success','Data Berhasil ditambah');
     }
 

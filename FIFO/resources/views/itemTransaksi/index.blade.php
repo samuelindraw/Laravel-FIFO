@@ -29,7 +29,7 @@
                             <form class="form-inline" action="/itemTransaksi/search" method="post">
                                 <div class="form-group mb-2">
                                     @csrf
-                                    <label for="kodeBarang">Bukti</label>
+                                    <label for="bukti">Bukti</label>
                                     <input type="text" class="form-control @error('bukti') is-invalid @enderror" id="bukti" name="bukti" value="{{ old('bukti') ?? $kunci ?? '' }}" placeholder="bukti"
                                     style="text-transform: uppercase">
                                     @error('bukti')
