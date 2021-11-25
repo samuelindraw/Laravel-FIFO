@@ -18,7 +18,7 @@ class MasterstokController extends Controller
      */
     public function index()
     {
-        $masterstok =  Masterstok::orderBy('id_kodebarang', 'asc')->get();
+        $masterstok =  Masterstok::orderBy('id_lokasi', 'asc')->get();
         return view('Masterstok/index', 
         [
             'title' => 'Master stok',
@@ -34,22 +34,24 @@ class MasterstokController extends Controller
     {
         if($request->bukti != "")
         {
-            $masterstok = Masterstok::where('bukti','LIKE','%'.$request->bukti.'%')->get();
-            $bukti = $request->bukti;
+            $lokasi = MasterLokasi::where('kodeLokasi',$request->kodeLokasi)->first();
+            $masterstok = Masterstok::where('id_lokasi','LIKE','%'.$lokasi->id.'%')->get();
+            $kodeLokasi = $request->kodeLokasi;
             return view('/Masterstok/index', 
             [
                 'title' => 'Master Stok',
-                "bukti" =>$bukti,
+                "kodeLokasi" =>$bukti,
                 'masterstok'=> $masterstok
             ]);
         }
         if($request->kodeBarang !="")
         {
-            $masterstok = Masterstok::where('id_kodebarang','LIKE','%'.$request->id_kodebarang.'%')->get();
+            $barang = MasterBarang::where('kodeBarang',$request->kodeBarang)->first();
+            $masterstok = Masterstok::where('id_kodebarang','LIKE','%'.$barang->id.'%')->get();
             return view('/Masterstok/index', 
             [
                 'title' => 'Master Stok',
-                "kodeBarang" =>$request->id_kodebarang,
+                "kodeBarang" =>$request->kodeBarang,
                 'masterstok'=> $masterstok
             ]);
         }

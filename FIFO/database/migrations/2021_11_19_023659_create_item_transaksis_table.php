@@ -19,7 +19,7 @@ class CreateItemTransaksisTable extends Migration
             $table->unsignedBigInteger('id_lokasi');
             $table->unsignedBigInteger('id_kodebarang');
             $table->string('namaBarang', 150);
-            $table->string('um',10);
+            $table->string('id_um',10);
             $table->integer('qty');
             $table->datetime('tgl_masuk');
             $table->timestamps();

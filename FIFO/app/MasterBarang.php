@@ -11,7 +11,7 @@ class MasterBarang extends Model
         'id',
         'kodeBarang',
         'namaBarang',
-        'um'
+        'id_um'
     ];
 
     public function Masterstok()
@@ -21,5 +21,9 @@ class MasterBarang extends Model
     public function itemTransaksi()
     {
         return $this->HasMany(itemTransaksi::class,'id_kodebarang','id');
+    }
+    public function Masterum()
+    {
+        return $this->belongsTo(Masterum::class,'id_um','id');
     }
 }

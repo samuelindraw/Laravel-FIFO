@@ -18,7 +18,7 @@ class CreateMasterLokasisTable extends Migration
             $table->string('kodeLokasi');
             $table->string('namaLokasi', 150);
             $table->timestamps();
-            $table->unique(['kodeLokasi'],'master_barang_unique');
+            $table->unique(['kodeLokasi','namaLokasi'],'master_barang_unique');
         });
     }
 

@@ -4,6 +4,12 @@
 
 <div class="container">
     <div class="row">
+      @if (session()->has('error'))
+      <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        {{ session('error') }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+      @endif
         <div class="col-10 mb-3">
             <form action="/itemTransaksi/kurangTransaksi" method="post" class="mt-3">
                 @csrf
@@ -54,15 +60,16 @@
                     </div>
                     @enderror
                   </div>
-                  <div class="mb-3">
-                    <label for="tgl_masuk" class="form-label">Tanggal masuk</label>
-                    <input type="date" class="form-control @error('tgl_masuk') is-invalid @enderror" id="tgl_masuk" name="tgl_masuk" value="{{ old('tgl_masuk')}}" placeholder="Kode Barang"
-                    style="text-transform: uppercase">
-                    @error('tgl_masuk')
-                    <div class="invalid-feedback">
-                       {{$message}}
+                  <div style="position: relative">
+                    <div class="mb-3">
+                      <label for="tgl_masuk" class="form-label">Tanggal masuk</label>
+                      <input class="form-control  @error('tgl_masuk') is-invalid @enderror" id="datepicker" name="tgl_masuk" value="{{ old('tgl_masuk') ?? $tgl_masuk ?? '' }}" placeholder="DD/MM/YYYY">
+                      @error('tgl_masuk')
+                      <div class="invalid-feedback">
+                         {{$message}}
+                      </div>
+                      @enderror
                     </div>
-                    @enderror
                   </div>
                 <br>
                 <div class="form-group">
@@ -72,8 +79,14 @@
         </div>
     </div>
 </div>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ" crossorigin="anonymous"></script>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+{{-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script> --}}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.15.1/moment.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.7.14/js/bootstrap-datetimepicker.min.js"></script>
+{{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css"> --}}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.7.14/css/bootstrap-datetimepicker.min.css">
 <script>
     $(document).ready(function() {
     $('#namaLokasi1').hide()
@@ -106,6 +119,14 @@
          $('#course').empty();
        }
     });
+    $('#datepicker').datetimepicker({
+    useCurrent: true,
+    format: 'DD/MM/YYYY',
+    widgetPositioning: {
+        horizontal: 'auto',
+        vertical: 'auto'
+    }
+    });
     $('#id_kodebarang').on('change', function() {
        var id_kodebarang = $(this).val();
        if(id_kodebarang) {
@@ -117,12 +138,13 @@
                success:function(data)
                {
                  if(data){
+                   console.log(data)
                   $('#namaBarang1').show()
                   $('#namaBarang').show()
                   $('#um1').show()
                   $('#um').show()
                   $('#namaBarang').val(data['namaBarang']);
-                  $('#um').val(data['um']);
+                  $('#um').val(data.masterum['um']);
                 }else{
                     $('#course').empty();
                 }

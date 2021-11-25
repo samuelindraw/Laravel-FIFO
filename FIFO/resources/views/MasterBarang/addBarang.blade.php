@@ -29,16 +29,29 @@
                     @enderror
                 </div>
                 <br>
-                <div class="form-group">
-                    <label for="um" class="form-label">UM</label>
-                    <input type="text" class="form-control @error('um') is-invalid @enderror" id="um" name="um" value="{{ old('um')}}">
-                    @error('um')
-                    <div class="invalid-feedback">
-                       {{$message}}
-                    </div>
-                    @enderror
-                </div>
+                {{-- <div class="mb-3">
+                    <label for="id_um" class="form-label">Unit Measurement</label>
+                    <select class="form-control" name="id_um" id="id_um" required>
+                        <option>Pilih UM</option>
+                      @foreach($masterum as $item)
+                        <option value="{{$item->id}}">{{$item->um}}</option>
+                      @endforeach
+                    </select>
+                </div> --}}
                 <br>
+                <div class="mb-3">
+                    <label for="id_um" class="form-label">Unit Measurement</label>
+                    <select class="form-control" name="id_um" id="id_um" required>
+                        <option>Pilih UM</option>
+                      @foreach($masterum as $item)
+                        {{-- <option value="{{$item->id}}">{{$item->kodeBarang}}</option> --}}
+                        <option value="{{$item->id}}" @isset($id_um) @if ($id_um == $item->id)
+                        selected
+                        @endif
+                    @endisset>{{ $item->um }}</option>
+                      @endforeach
+                    </select>
+                  </div>
                 <div class="form-group">
                     <button type="submit" class="w-25 btn btn-primary" name="submit">Simpan</button>
                 </div>

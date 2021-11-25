@@ -19,6 +19,7 @@ class CreateMasterstoksTable extends Migration
             $table->unsignedBigInteger('id_kodebarang');
             $table->integer('qty');
             $table->datetime('tgl_masuk');
+            $table->string('id_um',10);
             $table->timestamps();
             $table->unique(['id_kodebarang','tgl_masuk'],'master_stok_unique');
         });

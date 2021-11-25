@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use App\MasterBarang;
 use App\MasterLokasi;
 use App\Masterhistory;
@@ -20,6 +21,7 @@ class MasterhistoryController extends Controller
     public function index()
     {
         $masterhistory =  Masterhistory::orderBy('id', 'ASC')->get();
+        
         return view('Masterhistory/index', 
         [
             'title' => 'Master History',
@@ -43,21 +45,30 @@ class MasterhistoryController extends Controller
         if($request->bukti != "")
         {
             $masterhistory = Masterhistory::where('bukti','LIKE','%'.$request->bukti.'%')->get();
+            if(!$masterhistory)
+            {
+                $masterhistory = "";
+            }
             $bukti = $request->bukti;
             return view('/Masterhistory/index', 
             [
-                'title' => 'Master_Barang',
+                'title' => 'Transaksi History',
                 "bukti" =>$bukti,
                 'masterhistory'=> $masterhistory
             ]);
         }
         if($request->tgl_trans != "")
         {
-            $masterhistory = Masterhistory::where('tgl_trans','LIKE','%'.$request->tgl_trans.'%')->get();
+            $tgl = Carbon::createFromFormat('d/m/Y', $request->tgl_trans)->format('Y-m-d');
+            $masterhistory = Masterhistory::where('tgl_trans','LIKE','%'.$tgl.'%')->get();
+            if(!$masterhistory)
+            {
+                $masterhistory = "";
+            }
             $tgl_trans = $request->tgl_trans;
             return view('/Masterhistory/index', 
             [
-                'title' => 'Master_Barang',
+                'title' => 'Transaksi History',
                 "tgl_trans" =>$tgl_trans,
                 'masterhistory'=> $masterhistory
             ]);
@@ -66,10 +77,14 @@ class MasterhistoryController extends Controller
         {
             $masterhistory = MasterLokasi::where('kodeLokasi', $request->kodeLokasi)->first();
             $masterhistory = Masterhistory::where('id_lokasi','LIKE','%'.$masterhistory->id.'%')->get();
+            if(!$masterhistory)
+            {
+                $masterhistory = "";
+            }
             $kodeLokasi = $request->kodeLokasi;
             return view('/Masterhistory/index', 
             [
-                'title' => 'Master_Barang',
+                'title' => 'Transaksi History',
                 "kodeLokasi" =>$kodeLokasi,
                 'masterhistory'=> $masterhistory
             ]);
@@ -77,11 +92,23 @@ class MasterhistoryController extends Controller
         if($request->kodeBarang != "")
         {
             $masterhistory = MasterBarang::where('kodeBarang', $request->kodeBarang)->first();
-            $masterhistory = Masterhistory::where('id_kodebarang','LIKE','%'.$masterhistory->id.'%')->get();
+            if(!$masterhistory)
+            {
+                $id = 0;
+            }
+            else
+            {
+                $id = $masterhistory->id;
+            }
+            $masterhistory = Masterhistory::where('id_kodebarang','LIKE','%'.$id.'%')->get();
+            if(!$masterhistory)
+            {
+                $masterhistory = "";
+            }
             $kodeBarang = $request->kodeBarang;
             return view('/Masterhistory/index', 
             [
-                'title' => 'Master_Barang',
+                'title' => 'Transaksi History',
                 "kodeBarang" =>$kodeBarang,
                 'masterhistory'=> $masterhistory
             ]);
@@ -89,7 +116,7 @@ class MasterhistoryController extends Controller
         $masterhistory = Masterhistory::all();
         return view('/Masterhistory/index', 
             [
-                'title' => 'Master_Barang',
+                'title' => 'Transaksi History',
                 'masterhistory'=> $masterhistory
             ]);
 

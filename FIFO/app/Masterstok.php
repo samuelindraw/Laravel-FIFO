@@ -12,6 +12,7 @@ class Masterstok extends Model
         'id_lokasi',
         'id_kodebarang',
         'qty',
+        'id_um',
         'tgl_masuk'
     ];
     public function MasterBarang()
@@ -21,5 +22,9 @@ class Masterstok extends Model
     public function MasterLokasi()
     {
         return $this->belongsTo(MasterLokasi::class,'id_lokasi','id');
+    }
+    public function Masterum()
+    {
+        return $this->belongsTo(Masterum::class,'id_um','id');
     }
 }

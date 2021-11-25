@@ -2,8 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Masterum;
+use Carbon\Carbon;
 use App\MasterBarang;
+use App\historybarang;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class MasterBarangController extends Controller
 {
@@ -17,7 +21,7 @@ class MasterBarangController extends Controller
         $masterBarang =  MasterBarang::All()->sortBy("date");
         return view('/MasterBarang/index', 
         [
-            'title' => 'masterbarang',
+            'title' => 'Master Barang',
             "active" =>'masterbarang',
             'masterBarang'=> $masterBarang
         ]);
@@ -30,7 +34,13 @@ class MasterBarangController extends Controller
      */
     public function create()
     {
-        return view('/MasterBarang/addBarang');
+        $masterum = Masterum::all();
+        return view('/MasterBarang/addBarang', 
+        [
+            'title' => "Master Barang",
+            "active" =>'masterbarang',
+            'masterum'=> $masterum,
+        ]);
     }
 
     /**
@@ -42,18 +52,45 @@ class MasterBarangController extends Controller
     public function store(Request $request)
     {
         $validatedData = $request->validate([
-            'kodeBarang' => 'required',
-            'namaBarang' => 'required',
-            'um' => 'required'
+            'kodeBarang' => 'required|unique:master_barangs',
+            'namaBarang' => 'required|min:3|unique:master_barangs',
+            'id_um' =>'required'
         ]);
-       $masterbrg = MasterBarang::where('namaBarang', $request->namaBarang)->first();
+       $masterbrg = MasterBarang::where('namaBarang', $request->namaBarang)->where('kodeBarang', $request->kodeBarang)->first();
        if(!$masterbrg)
        {
-            MasterBarang::create($validatedData);
+           try{
+                MasterBarang::create($validatedData);
+                $cekbarang = MasterBarang::where('namaBarang', $request->namaBarang)->first();
+                DB::connection('mysql')->beginTransaction();
+                $insert = new historybarang([
+                    'id_barang' => $cekbarang->id,
+                    'kodeBarang' => $request->kodeBarang,
+                    'namaBarang' => $request->namaBarang,
+                    'id_um' => $request->id_um,
+                    'tanggal' => Carbon::now(),
+                    'status' => "INSERT",
+                    'created_at' => Carbon::now(),
+                    'updated_at' => Carbon::now()
+                ]);
+                $insert->save();
+             
+                DB::connection('mysql')->commit();
+            }catch (\Exception $e) {
+                //dd('KAWKOKOAKOWKOEA');
+                //dd($e->message);
+                //report($e->getMessage());
+                {DB::rollBack();
+                return redirect('/MasterBarang/index')->with('error', $e->getMessage());
+                //throw $e;
+                
+            } 
+        } 
+            
        }
        else
        {
-        return redirect('/MasterBarang/index')->with('error','Data tidak boleh sama');
+            return redirect('/MasterBarang/index')->with('error','Data tidak boleh sama');
        }
       
        return redirect('/MasterBarang/index')->with('success','Data Berhasil ditambah');
@@ -70,7 +107,7 @@ class MasterBarangController extends Controller
         $masterBarang = MasterBarang::where('kodeBarang','LIKE','%'.$request->kodeBarang.'%')->get();
         return view('/MasterBarang/index', 
         [
-            'title' => 'Master_Barang',
+            'title' => 'Master Barang',
             "kunci" =>$request->kodeBarang,
             'masterBarang'=> $masterBarang
         ]);
@@ -85,11 +122,13 @@ class MasterBarangController extends Controller
     public function edit($id)
     {
         $editdata =  MasterBarang::All()->firstWhere('id', $id);
+        $masterum = Masterum::all();
         return view('/MasterBarang/editBarang', 
         [
             'title' => "Data edit : $editdata->kodeBarang",
             "active" =>'editdata',
-            'masterBarang'=> $editdata
+            'masterBarang'=> $editdata,
+            'masterum' => $masterum
         ]);
     }
 
@@ -104,14 +143,40 @@ class MasterBarangController extends Controller
     {
         $validatedData = $request->validate([
         'kodeBarang' => 'required',
-        'namaBarang' => 'required',
-        'um' => 'required'
+        'namaBarang' => 'required'
         ]);
+        dd($validatedData);
         MasterBarang::where('id',$request->id)->update([
-        'kodeBarang' => $request->kodeBarang,
-        'namaBarang' => $request->namaBarang,
-        'um' => $request->um
+            'kodeBarang' => $request->kodeBarang,
+            'namaBarang' => $request->namaBarang,
+            'id_um' => $request->id_um
         ]);
+        try{
+            DB::connection('mysql')->beginTransaction();
+            $insert = new historybarang([
+                'id_barang' => $request->id,
+                'kodeBarang' => $request->kodeBarang,
+                'namaBarang' => $request->namaBarang,
+                'id_um' => $request->id_um,
+                'tanggal' => Carbon::now(),
+                'status' => "UPDATE",
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now()
+            ]);
+            $insert->save();
+        }
+        catch (\Exception $e) {
+            //dd('KAWKOKOAKOWKOEA');
+            //dd($e->message);
+            //report($e->getMessage());
+            {DB::rollBack();
+            return redirect('/MasterBarang/index')->with('error', $e->getMessage());
+            throw $e;
+            
+        }  
+    }
+       
+        DB::connection('mysql')->commit();
         //$request->session()->flash('success','Registration Success');
         return redirect('/MasterBarang/index')->with('success','Data Berhasil diupdate');
     }

@@ -13,23 +13,14 @@ class CreateMasterhistoriesTable extends Migration
      */
     public function up()
     {
-        // 'id',
-        // 'bukti',
-        // 'tgl_trans',
-        // 'jam',
-        // 'id_lokasi',
-        // 'id_kodebarang',
-        // 'qty',
-        // 'tgl_masuk',
-        // 'program',
-        // 'userid'
-        Schema::create('masterhistories', function (Blueprint $table) {
+
+        Schema::create('transaksi_history', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('bukti');
             $table->date('tgl_trans');
-            $table->time('jam');
             $table->unsignedBigInteger('id_lokasi');
             $table->unsignedBigInteger('id_kodebarang');
+            $table->string('id_um',10);
             $table->string('qty' , 50);
             $table->datetime('tgl_masuk');
             $table->string('program');

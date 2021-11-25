@@ -25,6 +25,9 @@
                     <a class="nav-link" href="/itemTransaksi/index">Transaksi</a>
                     <a class="nav-link" href="/Masterstok/index">Master Stok</a>
                     <a class="nav-link" href="/Masterhistory/index">Master History</a>
+                    <a class="nav-link" href="/Masterum/index">Master UM</a>
+                    <a class="nav-link" href="/historybarang/index">History Barang</a>
+                    <a class="nav-link" href="/historylokasi/index">History Lokasi</a>
                 </div>
             </div>
             <ul class="navbar-nav ms-auto">

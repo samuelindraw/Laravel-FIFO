@@ -70,13 +70,6 @@
                                             <td class="text-center">
                                                 <a href="/MasterLokasi/{{ $lokasi->id }}" title="edit"
                                                     class="btn btn-primary btn-sm">Edit</a>
-                                                <form method="POST" class="d-inline" onsubmit="return confirm('Move data to trash?')" 
-                                                action="{{route('destroylokasi', 
-                                                [$lokasi->id])}}">
-                                                    @csrf
-                                                    <input type="hidden" value="DELETE" name="_method">
-                                                    <input type="submit" value="Delete" class="btn btn-danger btn-sm">
-                                                </form>
                                             </td>
                                         </tr>
                                         @endforeach

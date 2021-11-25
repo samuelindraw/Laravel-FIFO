@@ -12,11 +12,10 @@ class itemTransaksi extends Model
         'id_lokasi',
         'id_kodebarang',
         'namaBarang',
-        'um',
+        'id_um',
         'qty',
         'tgl_masuk'
     ];
-    
     public function MasterBarang()
     {
         return $this->belongsTo(MasterBarang::class,'id_kodebarang','id');
@@ -24,5 +23,9 @@ class itemTransaksi extends Model
     public function MasterLokasi()
     {
         return $this->belongsTo(MasterLokasi::class,'id_lokasi','id');
+    }
+    public function Masterum()
+    {
+        return $this->belongsTo(Masterum::class,'id_um','id');
     }
 }

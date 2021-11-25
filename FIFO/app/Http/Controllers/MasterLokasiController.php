@@ -2,8 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use App\MasterLokasi;
+use App\historybarang;
+use App\historylokasi;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class MasterLokasiController extends Controller
 {
@@ -17,7 +21,7 @@ class MasterLokasiController extends Controller
         $masterLokasi =  MasterLokasi::All();
         return view('MasterLokasi/index', 
         [
-            'title' => 'Master_Lokasi',
+            'title' => 'Master Lokasi',
             "active" =>'masterlokasi',
             'masterLokasi'=> $masterLokasi
         ]);
@@ -42,13 +46,36 @@ class MasterLokasiController extends Controller
     public function store(Request $request)
     {
         $validatedData = $request->validate([
-            'kodeLokasi' => 'required',
-            'namaLokasi' => 'required'
+            'kodeLokasi' => 'required|unique:master_lokasis',
+            'namaLokasi' => 'required|unique:master_lokasis'
         ]);
        $lokasi = MasterLokasi::where('namaLokasi', $request->namaLokasi)->where('kodeLokasi', $request->kodeLokasi)->first();
        if(!$lokasi)
        {
+           try{
             MasterLokasi::create($validatedData);
+            $ceklokasi = MasterLokasi::where('namaLokasi', $request->namaLokasi)->first();
+            DB::connection('mysql')->beginTransaction();
+            $insert = new historylokasi([
+                'id_lokasi' => $ceklokasi->id,
+                'kodeLokasi' => $request->kodeLokasi,
+                'namaLokasi' => $request->namaLokasi,
+                'tanggal' => Carbon::now(),
+                'status' => "INSERT",
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now()
+            ]);
+            $insert->save();
+            DB::connection('mysql')->commit();
+        }catch (\Exception $e) {
+            //dd('KAWKOKOAKOWKOEA');
+            //dd($e->message);
+            //report($e->getMessage());
+            DB::rollBack();
+            return redirect('/MasterLokasi/index')->with('error', $e->getMessage());
+            throw $e;
+            
+        }      
        }
        else
        {
@@ -103,13 +130,36 @@ class MasterLokasiController extends Controller
     public function update(Request $request)
     {
         $validatedData = $request->validate([
-            'kodeLokasi' => 'required',
-            'namaLokasi' => 'required'
+            'kodeLokasi' => 'required|unique:master_lokasis',
+            'namaLokasi' => 'required|unique:master_lokasis'
         ]);
         MasterLokasi::where('id',$request->id)->update([
 		'kodeLokasi' => $request->kodeLokasi,
 		'namaLokasi' => $request->namaLokasi
 	]);
+    DB::connection('mysql')->beginTransaction();
+    try{
+        $insert = new historybarang([
+            'id_lokasi' => $request->id,
+            'kodeLokasi' => $request->kodeLokasi,
+            'namaLokasi' => $request->namaLokasi,
+            'tanggal' => Carbon::now(),
+            'status' => "UPDATE",
+            'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now()
+        ]);
+        $insert->save();
+        DB::connection('mysql')->commit();
+    }catch (\Exception $e) {
+        //dd('KAWKOKOAKOWKOEA');
+        //dd($e->message);
+        //report($e->getMessage());
+        DB::rollBack();
+        return redirect('/MasterLokasi/index')->with('error', $e->getMessage());
+        throw $e;
+        
+    }      
+   
        //$request->session()->flash('success','Registration Success');
        return redirect('MasterLokasi/index')->with('success','Data Berhasil diupdate');
     }

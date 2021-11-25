@@ -1,5 +1,5 @@
 @extends('layout.main')
-@section('title', 'MasterBarang')
+@section('title', 'History Barang')
 @section('container')
     <h1 class="mb-3 text-center">{{ $title }}</h1>
     <div class="container">
@@ -26,13 +26,13 @@
                     <!-- DataTales Example -->
                     <div class="card">
                         <div class="card-body">
-                            <form class="form-inline" action="/MasterBarang/search" method="post">
+                            <form class="form-inline" action="/historybarang/restore" method="post">
                                 <div class="form-group mb-2">
                                     @csrf
-                                    <label for="kodeBarang">Kode Barang</label>
-                                    <input type="text" class="form-control @error('kodeBarang') is-invalid @enderror" id="kodeBarang" name="kodeBarang" value="{{ old('kodeBarang') ?? $kunci ?? '' }}" placeholder="kodeBarang"
+                                    <label for="tanggal">Tanggal</label>
+                                    <input type="text" class="form-control @error('tanggal') is-invalid @enderror" id="datepicker" name="tanggal" value="{{ old('tanggal') ?? $tanggal ?? '' }}" placeholder="DD/MM/YYYY"
                                     style="text-transform: uppercase">
-                                    @error('kodeBarang')
+                                    @error('tanggal')
                                     <div class="invalid-feedback">
                                        {{$message}}
                                     </div>
@@ -41,37 +41,34 @@
                                 <div class="form-group mx-sm-3 mb-2">
                                 </div>
                                 <button type="submit" id="submit" name="submit" class="btn btn-primary mb-2"><i
-                                        class="fa fa-search fa-fw fa-xs"></i>Cari</button>
+                                        class="fa fa-search fa-fw fa-xs"></i>Restore</button>
                             </form>
                         </div>
                     </div>
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
-                            <a href="/MasterBarang/addBarang" class="btn btn-primary bottom-buffer" id="btn-add-barang"
-                                style="float:right;"><i class="fa fa-plus"></i> Tambah Barang </a>
-                            <h6 class="m-0 font-weight-bold text-primary">Table Master Barang</h6>
+                            <h6 class="m-0 font-weight-bold text-primary">Table History Barang</h6>
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
                                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                     <thead>
                                         <tr>
+                                            <th class="d-none d-sm-table-cell">Tanggal</th>
                                             <th class="d-none d-sm-table-cell">Kode Barang</th>
                                             <th class="d-none d-sm-table-cell">Nama Barang</th>
-                                            <th class="d-none d-sm-table-cell">UM</th>
-                                            <th class="text-center" style="width: 15%;">Action</th>
+                                            <th class="d-none d-sm-table-cell">um</th>
+                                            <th class="d-none d-sm-table-cell">status</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($masterBarang as $brg )                                       
+                                        @foreach ($historybarang as $brg )                                       
                                         <tr>
+                                            <td>{{ \Carbon\Carbon::parse($brg->tanggal)->format('d/m/Y')}}</td>
                                             <td>{{ $brg->kodeBarang }}</td>
                                             <td>{{ $brg->namaBarang }}</td>
-                                            <td>{{ $brg->Masterum->um }}</td>
-                                            <td class="text-center">
-                                                <a href="/MasterBarang/{{ $brg->id }}" title="edit"
-                                                    class="btn btn-primary btn-sm">Edit</a>
-                                            </td>
+                                            <td>{{ $brg->id_um }}</td>
+                                            <td>{{ $brg->status }}</td>
                                         </tr>
                                         @endforeach
                                     </tbody>
@@ -84,4 +81,22 @@
             </div>
         </div>
     </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.15.1/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.7.14/js/bootstrap-datetimepicker.min.js"></script>
+    {{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css"> --}}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.7.14/css/bootstrap-datetimepicker.min.css">
+    <script>
+        $(document).ready(function() {
+        $('#datepicker').datetimepicker({
+        useCurrent: true,
+        format: 'DD/MM/YYYY',
+        widgetPositioning: {
+            horizontal: 'auto',
+            vertical: 'auto'
+        }
+        });
+        });
+    </script>
 @endsection

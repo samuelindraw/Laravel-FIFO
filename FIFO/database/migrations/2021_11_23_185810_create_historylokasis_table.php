@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateMasterBarangsTable extends Migration
+class CreateHistorylokasisTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,15 @@ class CreateMasterBarangsTable extends Migration
      */
     public function up()
     {
-        Schema::create('master_barangs', function (Blueprint $table) {
+        Schema::create('historylokasis', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('kodeBarang');
-            $table->string('namaBarang', 150);
-            $table->char('id_um',10);
+            $table->integer('id_lokasi');
+            $table->string('kodeLokasi');
+            $table->string('namaLokasi', 150);
+            $table->string('status');
+            $table->string('tanggal');
             $table->timestamps();
-            $table->unique(['kodeBarang','namaBarang'],'master_barang_unique');
+            $table->unique(['id_lokasi'],'historylokasi_unique');
         });
     }
 
@@ -30,6 +32,6 @@ class CreateMasterBarangsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('master_barangs');
+        Schema::dropIfExists('historylokasis');
     }
 }

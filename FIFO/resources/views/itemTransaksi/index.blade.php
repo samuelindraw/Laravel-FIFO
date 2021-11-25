@@ -58,14 +58,14 @@
                                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                     <thead>
                                         <tr>
-                                            <th class="d-none d-sm-table-cell">Bukti</th>
-                                            <th class="d-none d-sm-table-cell">Kode Lokasi</th>
-                                            <th class="d-none d-sm-table-cell">Nama Lokasi</th>
-                                            <th class="d-none d-sm-table-cell">Kode Barang</th>
-                                            <th class="d-none d-sm-table-cell">Nama Barang</th>
-                                            <th class="d-none d-sm-table-cell">Tgl_masuk</th>
-                                            <th class="d-none d-sm-table-cell">qty</th>
-                                            <th class="d-none d-sm-table-cell">um</th>
+                                            <th class="d-none d-sm-table-cell">BUKTI</th>
+                                            <th class="d-none d-sm-table-cell">KODE LOKASI</th>
+                                            <th class="d-none d-sm-table-cell">NAMA LOKASI</th>
+                                            <th class="d-none d-sm-table-cell">KODE BARANG</th>
+                                            <th class="d-none d-sm-table-cell">NAMA BARANG</th>
+                                            <th class="d-none d-sm-table-cell">TGL MASUK</th>
+                                            <th class="d-none d-sm-table-cell" align="right">QTY</th>
+                                            <th class="d-none d-sm-table-cell">UM</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -77,8 +77,8 @@
                                             <td>{{ $trans->MasterBarang->kodeBarang }}</td>
                                             <td>{{ optional($trans->MasterBarang)->namaBarang }}</td>
                                             <td>{{ \Carbon\Carbon::parse($trans->tgl_masuk)->format('d/m/Y')}}</td>
-                                            <td>{{ $trans->qty }}</td>
-                                            <td>{{ $trans->um }}</td>
+                                            <td align="right">{{ $trans->qty }}</td>
+                                            <td>{{ $trans->Masterum->um }}</td>
                                         </tr>
                                         @endforeach
                                     </tbody>
